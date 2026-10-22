@@ -23,9 +23,9 @@ namespace Ovning_5_Garaget.Handlers
             return _garage.Remove(RegNumberValidation.Normalize(regNumber)); // städar regnumret och skickar vidare till garaget
         }
 
-        public IVehicle[] GetAllVehicles()
+        public List<IVehicle> GetAllVehicles()
         {
-            return _garage.GetVehicles(); // returnerar en kopia av garagets array
+            return _garage.GetAllVehicles(); // returnerar en kopia av garagets List
         }
 
         public IVehicle? FindByRegNumber(string regNumber)
@@ -55,40 +55,29 @@ namespace Ovning_5_Garaget.Handlers
             return count;
         }
 
-        // En koll för att se vilka olika typer av vehicle som finns i garaget.
-        public TypeCount[] GetTypeCounts()
+        // Räknar hur många fordon det finns av varje typ i garaget.
+        // Returnerar t.ex. [Car: 3, Motorcycle: 2, Bus: 1]
+        public List<TypeCount> GetTypeCounts()
         {
-            var vehicles = GetAllVehicles();
-            var typeNames = new string[vehicles.Length];
-            int uniqueCount = 0;
+            var vehicles = GetAllVehicles(); // en kopia av alla parkerade fordon
+            var typeNames = new List<string>(); // här samlas varje typnamn, bara en gång per typ
 
-
-            // Samla unika typnamn: skriv upp varje typ första gången vi ser den
+            // först ta reda på vilka typer som finns
             foreach (var vehicle in vehicles)
             {
-                var typeName = vehicle.GetType().Name;
-                bool alreadyFound = false;
+                var typeName = vehicle.GetType().Name; // klassens namn, t.ex. "Car" eller "Bus"
 
-                for (int i = 0; i < uniqueCount; i++)
-                {
-                    if (typeNames[i] == typeName)
-                    {
-                        alreadyFound = true;
-                        break;
-                    }
-                }
-
-                if (!alreadyFound)
-                {
-                    typeNames[uniqueCount] = typeName;
-                    uniqueCount++;
-                }
+                // Lägg bara till typen om vi inte redan sett den, så blir det inga dubbletter
+                if (!typeNames.Contains(typeName))
+                    typeNames.Add(typeName);
             }
 
-            var result = new TypeCount[uniqueCount];
-            for (int i = 0; i < uniqueCount; i++)
+            // Steg 2: räkna antal fordon för varje typ vi hittade
+            var result = new List<TypeCount>();
+            foreach (var typeName in typeNames)
             {
-                result[i] = new TypeCount(typeNames[i], CountByType(typeNames[i])); // “på plats i, lägg ett paket med typnamnet och hur många av den typen som finns” baserad på recorden TypeCount
+                // Skapar ett TypeCount med typnamnet och antalet, och lägger det i resultatet
+                result.Add(new TypeCount(typeName, CountByType(typeName)));
             }
 
             return result;

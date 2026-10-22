@@ -4,10 +4,11 @@ namespace Ovning_5_Garaget.Garages
 {
     public class Garage
     {
-        private readonly IVehicle?[] _vehicles;
+        private readonly List<IVehicle> _vehicles;
 
-        public int Capacity => _vehicles.Length;
-        public int Count { get; private set; }
+        public int Capacity { get; 
+        }
+        public int Count => _vehicles.Count;
         public bool IsFull => Count >= Capacity;
 
         public Garage(int capacity)
@@ -17,83 +18,52 @@ namespace Ovning_5_Garaget.Garages
                 throw new ArgumentOutOfRangeException(nameof(capacity), "Kapaciteten måste vara större än 0.");
             }
 
-            _vehicles = new IVehicle?[capacity];
+            Capacity = capacity; // sätter det här objektet till den listan
+            _vehicles = new List<IVehicle>();
         }
 
         public bool Park(IVehicle vehicle)
         {
             if (IsFull) return false;
 
-            for (int i = 0; i < _vehicles.Length; i++)
+            foreach (var v in _vehicles)
             {
-                if (_vehicles[i] is not null &&
-                    _vehicles[i]!.RegNumber.Equals(vehicle.RegNumber, StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
+                // jämför regnumren som strängar, oavsett stor/liten bokstav
+                if (v.RegNumber.Equals(vehicle.RegNumber, StringComparison.OrdinalIgnoreCase))
+                    return false; // regnumret finns redan
             }
 
-
-            for (int i = 0; i < _vehicles.Length; i++)
-            {
-                if (_vehicles[i] is null)
-                {
-                    _vehicles[i] = vehicle;
-                    Count++;
-                    return true;
-                }
-            }
-            return false;
+            _vehicles.Add(vehicle); // lägger fordonet sist i listan
+            return true;
         }
 
 
         public bool Remove(string regNumber)
         {
-            for (int i = 0; i < _vehicles.Length; i++)
+            for (int i = 0; i < _vehicles.Count; i++)
             {
-                if (_vehicles[i] is not null &&
-                    _vehicles[i]!.RegNumber.Equals(regNumber, StringComparison.OrdinalIgnoreCase))
+                if (_vehicles[i].RegNumber.Equals(regNumber, StringComparison.OrdinalIgnoreCase))
                 {
-                    _vehicles[i] = null;
-                    Count--;
+                    _vehicles.RemoveAt(i); // tar bort på index i, resten flyttas ett steg
                     return true;
                 }
             }
             return false;
         }
 
-        public IVehicle[] GetVehicles()
+        public List<IVehicle> GetAllVehicles()
         {
-            // Ny array med storleken av Count
-            var result = new IVehicle[Count];
-
-            //Egen räknade för var i nya arrayen nästa fordon ska hamna
-            int index = 0;
-
-            //Gå igenom alla platser i garaget
-            for (int i = 0; i < _vehicles.Length; i++)
-            {
-                if (_vehicles[i] is not null)
-                {
-                    // lägg till fordonet (! säger att vi vet att det inte är null eftersom vi kolla det i if-satsen)
-                    result[index] = _vehicles[i]!;
-                    index++;
-                }
-            }
-            return result;
+            return new List<IVehicle>(_vehicles); // en kopia, så ingen utanför kan ändra garagets lista
         }
 
         public IVehicle? FindByRegNumber(string regNumber)
         {
-            for (int i = 0; i < _vehicles.Length; i++)
+            foreach (var v in _vehicles)
             {
-                if (_vehicles[i] is not null &&
-                    _vehicles[i]!.RegNumber.Equals(regNumber, StringComparison.OrdinalIgnoreCase))
-                {
-                    return _vehicles[i];
-                }
+                if (v.RegNumber.Equals(regNumber, StringComparison.OrdinalIgnoreCase))
+                    return v; // hittade fordonet
             }
-            return null;
+            return null; // inget fordon med det regnumret
         }
 
 
