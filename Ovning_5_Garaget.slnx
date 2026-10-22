@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path="GUIDE_arrayer_till_listor.md" />
     <File Path="README.md" />
   </Folder>
   <Project Path="Ovning_5_Garaget.Tests/Ovning_5_Garaget.Tests.csproj" />
