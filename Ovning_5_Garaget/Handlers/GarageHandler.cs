@@ -1,6 +1,6 @@
 ﻿using Ovning_5_Garaget.Garages;
-using Ovning_5_Garaget.Vehicles;
 using Ovning_5_Garaget.Validation;
+using Ovning_5_Garaget.Vehicles;
 
 namespace Ovning_5_Garaget.Handlers
 {
@@ -67,12 +67,12 @@ namespace Ovning_5_Garaget.Handlers
             {
                 var typeName = vehicle.GetType().Name; // klassens namn, t.ex. "Car" eller "Bus"
 
-                // Lägg bara till typen om vi inte redan sett den, så blir det inga dubbletter
+                // lägg bara till typen om vi inte redan sett den, så blir det inga dubbletter
                 if (!typeNames.Contains(typeName))
                     typeNames.Add(typeName);
             }
 
-            // Steg 2: räkna antal fordon för varje typ vi hittade
+            // sedan räkna antal fordon för varje typ vi hittade
             var result = new List<TypeCount>();
             foreach (var typeName in typeNames)
             {
@@ -87,30 +87,19 @@ namespace Ovning_5_Garaget.Handlers
 
         // Fritextsökning: returnerar alla fordon där något fält matchar söktermen.
         // Varje fordon avgör själv vad som matchar via sin egen Matches-metod (polymorfism).
-        public IVehicle[] Search(string searchTerm)
+        public List<IVehicle> Search(string searchTerm)
         {
             var term = searchTerm.Trim();
             var vehicles = GetAllVehicles();
 
-            // Loop 1: räkna träffar för att veta hur stor arrayen ska vara
-            int count = 0;
-            foreach (var vehicle in vehicles)
-            {
-                if (vehicle.Matches(term))
-                {
-                    count++;
-                }
-            }
 
-            // Loop 2: fyll arrayen med träffarna
-            var result = new IVehicle[count];
-            int index = 0;
+            // Tar bort den tidigare loopen och går bara igenom listan med vehicles
+            var result = new List<IVehicle>();
             foreach (var vehicle in vehicles)
             {
                 if (vehicle.Matches(term))
                 {
-                    result[index] = vehicle;
-                    index++;
+                    result.Add(vehicle);
                 }
             }
 
@@ -118,35 +107,23 @@ namespace Ovning_5_Garaget.Handlers
         }
 
         // Sök på en eller flera egenskaper. Null betyder att egenskapen inte används i sökningen.
-        public IVehicle[] SearchByProperties(string? color = null, int? wheels = null, string? brand = null, string? type = null)
+        public List<IVehicle> SearchByProperties(string? color = null, int? wheels = null, string? brand = null, string? type = null)
         {
             var vehicles = GetAllVehicles();
+            var result = new List<IVehicle>();
 
-            // Loop 1: räkna träffar för att veta hur stor arrayen ska vara
-            int count = 0;
             foreach (var vehicle in vehicles)
             {
                 if (MatchesProperties(vehicle, color, wheels, brand, type))
                 {
-                    count++;
-                }
-            }
-
-            // Loop 2: fyll arrayen med träffarna
-            var result = new IVehicle[count];
-            int index = 0;
-            foreach (var vehicle in vehicles)
-            {
-                if (MatchesProperties(vehicle, color, wheels, brand, type))
-                {
-                    result[index] = vehicle;
-                    index++;
+                    result.Add(vehicle);
                 }
             }
 
             return result;
         }
 
+        //Denna står kvar eftersom den inte gör något med arrayer.
         // Villkoret för SearchByProperties: varje kriterium är antingen null (bryr oss inte) eller måste stämma
         private static bool MatchesProperties(IVehicle vehicle, string? color, int? wheels, string? brand, string? type)
         {
