@@ -1,8 +1,9 @@
-# Garage 1.0
+# Garage 2.0
 
 En konsolapplikation i C# som simulerar ett parkeringsgarage. Övning 5 i .NET-utbildningen hos Lexicon.
 
-`Version 1` bygger enbart på arrayer. Listor kommer i `version 2` och generics i `version 3`.
+Nu är det `version 2` och jag har bytt ut Arraylogiken mot Lists, väldigt smidigt när det var uppbyggt för refaktorisering innan, också  smidigt generellt med List. 
+Generics ser vi mer av `version 3`.
 
 ## Funktioner
 
@@ -33,7 +34,7 @@ Alla fordon har registreringsnummer, färg, märke och antal hjul.
 ## Teknik och upplägg
 
 - **.NET 10 / C#**, **xUnit** för enhetstester
-- Garaget lagrar fordonen i en privat array, ingen `List`, `LINQ`, `IEnumerable` eller `generics`
+- Garaget lagrar fordonen i en privat List<IVehicle>. Ingen LINQ, och inga egna generiska klasser (kommer i `version 3`)
 - Abstrakt basklass `Vehicle` med gemensamma egenskaper, en subklass per fordonstyp
 - Fritextsökningen använder polymorfism: varje fordon har en egen `Matches`-metod som anropar basklassens och lägger till sina egna fält
 - Registreringsnummer valideras med regex (tre bokstäver, två siffror, en siffra eller bokstav) och normaliseras till versaler
@@ -57,7 +58,7 @@ Garaget/
 ## Kom igång
 
 ```bash
-git clone https://github.com/irlmonster/GaragetV1.git
+git clone https://github.com/irlmonster/GaragetV2.git
 cd Garaget
 dotnet run --project Ovning_5_Garaget
 ```
