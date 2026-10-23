@@ -29,7 +29,7 @@ namespace Ovning_5_Garaget.Tests
             var result = handler.SearchByProperties(color: "Röd", type: "Car");
 
             // Två röda bilar, den röda bussen ska inte komma med
-            Assert.Equal(2, result.Length);
+            Assert.Equal(2, result.Count);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace Ovning_5_Garaget.Tests
             var result = handler.SearchByProperties(type: "bus");
 
             // Båda bussarna, oavsett färg. Små bokstäver ska också fungera
-            Assert.Equal(2, result.Length);
+            Assert.Equal(2, result.Count);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace Ovning_5_Garaget.Tests
             var result = handler.SearchByProperties();
 
             // Inga kriterier betyder att allt matchar
-            Assert.Equal(6, result.Length);
+            Assert.Equal(6, result.Count);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Ovning_5_Garaget.Tests
             var result = handler.GetTypeCounts();
 
             // Tre olika typer i garaget
-            Assert.Equal(3, result.Length);
+            Assert.Equal(3, result.Count);
 
             // Ordningen följer när typen först parkerades: bilar, bussar, motorcykel
             Assert.Equal(new TypeCount("Car", 3), result[0]);

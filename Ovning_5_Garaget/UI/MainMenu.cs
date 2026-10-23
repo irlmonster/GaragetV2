@@ -102,7 +102,7 @@ namespace Ovning_5_Garaget.UI
 
             var vehicles = _handler.GetAllVehicles();
 
-            if (vehicles.Length == 0)
+            if (vehicles.Count == 0)
             {
                 ConsoleOutput.WriteWarning("Garaget är tomt.");
                 return;
@@ -120,7 +120,7 @@ namespace Ovning_5_Garaget.UI
 
             var typeCounts = _handler.GetTypeCounts();
 
-            if (typeCounts.Length == 0)
+            if (typeCounts.Count == 0)
             {
                 ConsoleOutput.WriteWarning("Garaget är tomt.");
                 return;
@@ -251,7 +251,7 @@ namespace Ovning_5_Garaget.UI
 
             // Deklareras här utanför if-satsen, så båda grenarna kan fylla den
             // och den finns kvar för utskriften längre ner
-            IVehicle[] result;
+            List<IVehicle> result;
 
             if (choice == 1)
             {
@@ -274,14 +274,14 @@ namespace Ovning_5_Garaget.UI
             Console.WriteLine();
 
             // Inga träffar: varna och gå ut
-            if (result.Length == 0)
+            if (result.Count == 0)
             {
                 ConsoleOutput.WriteWarning("Inga fordon matchade sökningen.");
                 return;
             }
 
             // Visa antal träffar och skriv ut varje fordon (använder fordonets ToString)
-            ConsoleOutput.WriteSuccess($"{result.Length} fordon hittades:");
+            ConsoleOutput.WriteSuccess($"{result.Count} fordon hittades:");
             foreach (var vehicle in result)
             {
                 Console.WriteLine(vehicle);
@@ -292,8 +292,8 @@ namespace Ovning_5_Garaget.UI
         {
             ConsoleOutput.WriteHeader("Fyller garaget med testfordon");
 
-            // En array med färdiga fordon. Måsvingarna fyller den direkt vid skapandet.
-            var vehicles = new IVehicle[]
+            // En Lista med färdiga fordon. Måsvingarna fyller den direkt vid skapandet.
+            var vehicles = new List<IVehicle>()
             {
                 new Car("ABC123", "Röd", 4, "Volvo", "Bensin", CarType.Kombi),
                 new Car("ABC321", "Lila", 4, "Ford", "Bensin", CarType.Sedan),
@@ -320,9 +320,9 @@ namespace Ovning_5_Garaget.UI
             ConsoleOutput.WriteSuccess($"{parked} fordon parkerades.");
 
             // Om inte alla fick plats
-            if (parked < vehicles.Length)
+            if (parked < vehicles.Count)
             {
-                ConsoleOutput.WriteWarning($"{vehicles.Length - parked} fordon kunde inte parkeras (garaget är fullt eller regnumret finns redan).");
+                ConsoleOutput.WriteWarning($"{vehicles.Count - parked} fordon kunde inte parkeras (garaget är fullt eller regnumret finns redan).");
             }
         }
 
