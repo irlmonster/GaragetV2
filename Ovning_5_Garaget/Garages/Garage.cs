@@ -22,6 +22,7 @@ namespace Ovning_5_Garaget.Garages
             _vehicles = new List<IVehicle>();
         }
 
+        // Park
         public bool Park(IVehicle vehicle)
         {
             if (IsFull) return false;
@@ -37,25 +38,20 @@ namespace Ovning_5_Garaget.Garages
             return true;
         }
 
-
+        // Remove
         public bool Remove(string regNumber)
         {
-            for (int i = 0; i < _vehicles.Count; i++)
-            {
-                if (_vehicles[i].RegNumber.Equals(regNumber, StringComparison.OrdinalIgnoreCase))
-                {
-                    _vehicles.RemoveAt(i); // tar bort på index i, resten flyttas ett steg
-                    return true;
-                }
-            }
-            return false;
+            var vehicle = _vehicles.FirstOrDefault(v => v.RegNumber.Equals(regNumber, StringComparison.OrdinalIgnoreCase)); // FirstOrDefault returnerar null om inget matchar
+            return vehicle is not null && _vehicles.Remove(vehicle);
         }
 
+        //List all vehicles
         public List<IVehicle> GetAllVehicles()
         {
             return new List<IVehicle>(_vehicles); // en kopia, så ingen utanför kan ändra garagets lista
         }
 
+        // Find regnumber
         public IVehicle? FindByRegNumber(string regNumber)
         {
             foreach (var v in _vehicles)
