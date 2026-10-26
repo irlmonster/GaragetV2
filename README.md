@@ -1,8 +1,8 @@
 # Garage 2.0
 
-En konsolapplikation i C# som simulerar ett parkeringsgarage. Övning 5 i .NET-utbildningen hos Lexicon.
+En konsolapplikation i C# som simulerar ett parkeringsgarage. Övning 6 i .NET-utbildningen hos Lexicon.
 
-Nu är det `version 2` och jag har bytt ut Arraylogiken mot Lists, väldigt smidigt när det var uppbyggt för refaktorisering innan, också  smidigt generellt med List. 
+Nu är det `version 2` och jag har bytt ut Arraylogiken mot Lists, väldigt smidigt när det var uppbyggt för refaktorisering innan, också smidigt generellt med List. 
 Generics ser vi mer av `version 3`.
 
 ## Funktioner
@@ -44,7 +44,7 @@ Alla fordon har registreringsnummer, färg, märke och antal hjul.
 ## Struktur
 
 ```
-Garaget/
+GaragetV2/
 ├── Ovning_5_Garaget/
 │   ├── Garages/        Garage, själva samlingen av fordon
 │   ├── Handlers/       GarageHandler och TypeCount
@@ -55,11 +55,49 @@ Garaget/
                         Tester för garage, handler, fordon och validering
 ```
 
+## Klasser och ansvar
+
+| Klass | Ansvar |
+|-------|--------|
+| `Program` | Startpunkt, skapar garaget och startar huvudmenyn |
+| `MainMenu` | Visar menyer och styr flödet utifrån användarens val |
+| `ConsoleInput` | All inläsning från användaren, frågar om vid felaktig input |
+| `ConsoleOutput` | All utskrift, inklusive färgad feedback |
+| `GarageHandler` | Mellanlager mellan UI och garage, menyn pratar aldrig direkt med `Garage` |
+| `TypeCount` | Håller räkning per fordonstyp vid listning |
+| `Garage` | Lagrar fordonen i en privat List, hanterar parkering, uttag och sökning |
+| `RegNumberValidation` | Validerar och normaliserar registreringsnummer med regex |
+| `IVehicle` / `Vehicle` | Interface och abstrakt basklass med gemensamma egenskaper och `Matches` |
+| `Car`, `Motorcycle`, `Bus`, `Boat`, `Airplane` | Subklasser med egna egenskaper och utökad `Matches` |
+
+
+
+## Kända begränsningar
+- Alla fordon tar en plats, har inte byggt något för storlek ännu
+- Ingen LINQ eller egna generiska klasser ännu (kommer i version 3)
+- Data sparas inte mellan körningarna, spara och ladda från fil kommer framöver
+
+## Jag vill ha feedback på
+**Arkitektur**
+
+Är det lätt att förstå hur koden hänger ihop?
+
+Jag har byggt det med skalering i åtanke, för att det ska vara lätt att bygga ut / vidare.
+Även hela menyn är byggd för att kunna användas till andra applikationer med mindre refaktorisering.
+Skulle gärna ta både positiv och negativ feedback på hur jag har byggt det och om ni ser något bättre sätt att lösa det på.
+
+**Sökning**
+- Hur skulle ni göra kombinerad sökning på flera egenskaper mer flexibel och lättläst?
+- Är polymorfismen i `Matches` en bra lösning för fritextsökning, eller finns det smidigare sätt?
+
+**Tester**
+- Är det något mer som är värt att testa?
+
 ## Kom igång
 
 ```bash
 git clone https://github.com/irlmonster/GaragetV2.git
-cd Garaget
+cd GaragetV2
 dotnet run --project Ovning_5_Garaget
 ```
 
@@ -68,3 +106,9 @@ Köra testerna:
 ```bash
 dotnet test
 ```
+
+
+
+
+
+
